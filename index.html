@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edward의 당첨기</title>
+    <style>
+        .box {
+            display: flex;
+        }
+        .container {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            width: 340px;
+            align-items: flex-end;
+        }
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+        textarea {
+            width: 200px;
+            height: 300px;
+            outline: none;
+            border: 1px solid #333;
+        }
+        input {
+            width: 120px;
+            box-sizing: border-box;
+            font-size: 16px;
+            height: 40px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 10px 20px;
+        }
+        button {
+            box-sizing: border-box;
+            font-size: 20px;
+            background: #444;
+            color: #fff;
+            padding: 8px 16px;
+            outline: none;
+            border: none;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+    <form id="form" class="container">
+        <div class="row">
+            <div class="col">
+                <textarea class="form-control" name="name" placeholder="이름을 입력 해 주세요"></textarea>
+            </div>
+            <div class="col">
+                <input class="form-control" type="number" name="person" placeholder="당첨자 수" />
+            </div>
+        </div>
+        <button type="submit">제출</button>
+    </form>
+    <div>
+        <h3>행운의 당첨자</h3>
+    <div id="result"></div>
+    </div>
+</div>
+    <script>
+        const result = document.getElementById('result')
+        const form = document.getElementById('form')
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            const data = new FormData(e.target);
+            const [names, person] =data.values()
+            if (!names) {
+                alert('이름을 입력 해 주세요')
+                return
+            }
+            if (!person) {
+                alert('당첨될 인원을 선택 해 주세요')
+                return
+            }
+            const nameList = names.split('\n')
+            const selected = nameList
+                .map(name => ({ name, value: Math.random()}))
+                .sort((a,b) => b.value-a.value)
+                .slice(0, Number(person))
+                .map(v => v.name)
+                .join('\n')
+            result.innerText = selected
+            navigator.clipboard.writeText(selected)
+            alert('당첨자가 복사 되었습니다.')
+        })
+    </script>
+</body>
+</html>
